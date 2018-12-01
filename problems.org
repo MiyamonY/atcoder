@@ -1,0 +1,15 @@
+#+TITLE:
+#+AUTHOR: ymiyamoto
+#+EMAIL: ymiyamoto324@gmail.com
+#+STARTUP: showall
+#+LANGUAGE:ja
+#+OPTIONS: \n:nil creator:nil indent
+
+* ABC
+|  No | prob | 最終回答  | 1回目 | 備考                            | タイプ              |
+|-----+------+-----------+-------+---------------------------------+---------------------|
+| 113 | A    | 2018/12/1 | o     |                                 |                     |
+| 113 | B    | 2018/12/1 | o     |                                 |                     |
+| 113 | C    | 2018/12/1 | x     | 県毎にソートしてbinarySerchする | sort, binearySearch |
+| 113 | D    | 2018/12/1 | ×     | dpして全探索する                | dp, all search      |
+|     |      |           |       |                                 |                     |
