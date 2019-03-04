@@ -10,5 +10,6 @@ fi
 
 for problem in a b c d
 do
-    mkdir -p "${SCRIPT_DIR}/../$1/$2/${problem}/01" "${SCRIPT_DIR}/../$1/$2/${problem}/02"
+    mkdir -p "${SCRIPT_DIR}/../$1/$2/${problem}/"
+    cargo new "${SCRIPT_DIR}/../$1/$2/${problem}/01" --name ${problem} --vcs none
 done
