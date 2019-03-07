@@ -1,4 +1,4 @@
-use std::cmp::min;
+use std::collections::HashMap;
 
 #[allow(unused_macros)]
 macro_rules! scan {
@@ -62,43 +62,28 @@ macro_rules! scan {
     };
 }
 
+fn calc(n: u64, dp: &mut HashMap<u64, u64>) -> u64 {
+    if let Some(&v) = dp.get(&n) {
+        return v;
+    }
+
+    let mut m = calc((n - 1) / 2, dp);
+    m += calc(n / 2, dp);
+    m %= 1_000_000_007;
+    if n > 1 {
+        m += calc(n / 2 - 1, dp);
+        m %= 1_000_000_007
+    }
+
+    let v = dp.entry(n).or_insert(0);
+    *v = m % 1_000_000_007;
+    m
+}
+
 fn main() {
-    let (n, m) = scan!(usize, usize);
+    let n = scan!(u64);
 
-    let mut graph = vec![vec![1 << 30; n + 1]; n + 1];
-    for i in 0..graph.len() {
-        graph[i][i] = 0
-    }
-
-    let mut edges = vec![];
-    for _ in 0..m {
-        let (a, b, c) = scan!(usize, usize, usize);
-        edges.push((a, b, c));
-        graph[a][b] = c;
-        graph[b][a] = c;
-    }
-
-    for k in 1..n + 1 {
-        for i in 1..n + 1 {
-            for j in 1..n + 1 {
-                graph[i][j] = min(graph[i][j], graph[i][k] + graph[k][j])
-            }
-        }
-    }
-
-    let mut ans = 0;
-    for e in edges.iter() {
-        let mut found = false;
-        for i in 1..graph.len() {
-            for j in 1..graph[i].len() {
-                if graph[i][e.0] + e.2 + graph[e.1][j] == graph[i][j] {
-                    found = true;
-                }
-            }
-        }
-        if !found {
-            ans += 1
-        }
-    }
-    println!("{}", ans)
+    let mut dp: HashMap<u64, u64> = HashMap::new();
+    dp.entry(0).or_insert(1);
+    println!("{}", calc(n, &mut dp))
 }

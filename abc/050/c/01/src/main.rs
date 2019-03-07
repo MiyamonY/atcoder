@@ -1,4 +1,4 @@
-use std::cmp::min;
+use std::collections::HashMap;
 
 #[allow(unused_macros)]
 macro_rules! scan {
@@ -62,42 +62,57 @@ macro_rules! scan {
     };
 }
 
+fn pow2(n: usize) -> i64 {
+    let mut ret = 1;
+    for _ in 0..n {
+        ret *= 2;
+        ret %= 1_000_000_007
+    }
+    ret
+}
+
 fn main() {
-    let (n, m) = scan!(usize, usize);
+    let n = scan!(usize);
+    let vs = scan!(usize;;);
 
-    let mut graph = vec![vec![1 << 30; n + 1]; n + 1];
-    for i in 0..graph.len() {
-        graph[i][i] = 0
+    let mut m = HashMap::new();
+    for v in vs.iter() {
+        let num = m.entry(v).or_insert(0);
+        *num += 1;
     }
 
-    let mut edges = vec![];
-    for _ in 0..m {
-        let (a, b, c) = scan!(usize, usize, usize);
-        edges.push((a, b, c));
-        graph[a][b] = c;
-        graph[b][a] = c;
-    }
-
-    for k in 1..n + 1 {
-        for i in 1..n + 1 {
-            for j in 1..n + 1 {
-                graph[i][j] = min(graph[i][j], graph[i][k] + graph[k][j])
+    let mut ans = pow2(n / 2);
+    if n % 2 == 1 {
+        if m.get(&0).is_none() {
+            ans = 0
+        } else {
+            let mut nums = vec![];
+            for (&&k, &v) in m.iter() {
+                if (k == 0 && v != 1) || (k != 0 && v != 2) {
+                    ans = 0
+                }
+                nums.push(k);
             }
-        }
-    }
-
-    let mut ans = 0;
-    for e in edges.iter() {
-        let mut found = false;
-        for i in 1..graph.len() {
-            for j in 1..graph[i].len() {
-                if graph[i][e.0] + e.2 + graph[e.1][j] == graph[i][j] {
-                    found = true;
+            nums.sort();
+            for (i, &n) in nums.iter().enumerate() {
+                if i * 2 != n {
+                    ans = 0
                 }
             }
         }
-        if !found {
-            ans += 1
+    } else {
+        let mut nums = vec![];
+        for (&&k, &v) in m.iter() {
+            if v != 2 {
+                ans = 0
+            }
+            nums.push(k)
+        }
+        nums.sort();
+        for (i, &n) in nums.iter().enumerate() {
+            if 2 * i + 1 != n {
+                ans = 0
+            }
         }
     }
     println!("{}", ans)
