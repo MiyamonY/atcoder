@@ -62,44 +62,32 @@ macro_rules! scan {
 
 const MOD: i64 = 1_000_000_007;
 
-enum Color {
-    W,
-    B,
+fn dfs_w(graph: &[Vec<usize>], p: usize, n: usize, dp: &mut [Option<i64>]) -> i64 {
+    let mut whites = 1;
+    for &g in &graph[n] {
+        if g != p {
+            whites *= dfs(graph, n, g, dp);
+            whites %= MOD;
+        }
+    }
+    whites
 }
 
-fn dfs(
-    dp: &mut [Vec<Option<i64>>],
-    graph: &[Vec<usize>],
-    visited: &mut [bool],
-    n: usize,
-    c: Color,
-) -> i64 {
-    visited[n] = true;
-
-    let m = match c {
-        Color::W => 0,
-        Color::B => 1,
-    };
-
-    let mut sum = 0;
-    for &g in graph[n].iter() {
-        if !visited[g] {
-            sum += match c {
-                Color::W => {
-                    dfs(dp, graph, visited, g, Color::W) + dfs(dp, graph, visited, g, Color::B)
-                }
-                Color::B => dfs(dp, graph, visited, g, Color::W),
-            }
-        }
-    }
-    if sum == 0 {
-        sum = match c {
-            Color::W => 2,
-            Color::B => 1,
-        }
+fn dfs(graph: &[Vec<usize>], p: usize, n: usize, dp: &mut [Option<i64>]) -> i64 {
+    if let Some(v) = dp[n] {
+        return v;
     }
 
-    sum
+    let mut whites = 1;
+    for &g in &graph[n] {
+        if g != p {
+            whites *= dfs_w(graph, n, g, dp);
+            whites %= MOD;
+        }
+    }
+    let v = (dfs_w(graph, p, n, dp) + whites) % MOD;
+    dp[n] = Some(v);
+    v
 }
 
 fn main() {
@@ -112,9 +100,6 @@ fn main() {
         graph[b].push(a);
     }
 
-    let mut dp = vec![vec![None; n + 1]; 2];
-    let mut visited = vec![false; n + 1];
-
-    println!("{}", dfs(&mut dp, &graph, &mut visited, 1, Color::W));
-    println!("{:?}", dp);
+    let mut dp = vec![None; n + 1];
+    println!("{}", dfs(&graph, 0, 1, &mut dp));
 }
