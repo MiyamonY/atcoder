@@ -1,3 +1,4 @@
+use std::cmp::max;
 use std::collections::BinaryHeap;
 
 #[allow(unused_macros)]
@@ -67,12 +68,11 @@ fn dikstra(graph: &[Vec<(usize, i64)>]) -> Vec<i64> {
     dists[1] = 0;
 
     let mut heap = BinaryHeap::new();
-
     heap.push((0, 1));
-    while let Some((dist_v, v)) = heap.pop() {
+    while let Some((_, v)) = heap.pop() {
         for &(next, d) in &graph[v] {
-            let dist = -dist_v + d;
-            if dists[next] > dist {
+            let dist = dists[v] + d;
+            if dist < dists[next] {
                 dists[next] = dist;
                 heap.push((-dists[next], next))
             }
@@ -101,7 +101,7 @@ fn main() {
         .zip(rdists.into_iter())
         .skip(1)
         .enumerate()
-        .map(|(i, (d, rd))| (t - d - rd) * vs[i])
+        .map(|(i, (d, rd))| max(0, t - d - rd) * vs[i])
         .max()
         .unwrap();
 
