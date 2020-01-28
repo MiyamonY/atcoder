@@ -8,8 +8,7 @@ if [ $# -ne 3 ];then
     exit 1
 fi
 
-for problem in a b c d
+for problem in a b c d e f
 do
-    mkdir -p "${SCRIPT_DIR}/../$1/$2/${problem}/"
-    cargo new "${SCRIPT_DIR}/../$1/$2/${problem}/$3" --name ${problem} --vcs none
+    mkdir -p "${SCRIPT_DIR}/../$1/$2/${problem}/$3"
 done
