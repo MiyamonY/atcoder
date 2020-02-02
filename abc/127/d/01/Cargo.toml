@@ -1,7 +1,0 @@
-[package]
-name = "d"
-version = "0.1.0"
-authors = ["MIYAMOTO Yohei <y.miyamoto324@gmail.com>"]
-edition = "2018"
-
-[dependencies]
