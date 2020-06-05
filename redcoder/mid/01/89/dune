@@ -1,0 +1,3 @@
+(executable
+ (name 89)
+ (libraries batteries))

@@ -1,0 +1,3 @@
+(executable
+ (name 08)
+ (libraries batteries))

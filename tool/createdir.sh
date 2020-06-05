@@ -11,4 +11,5 @@ fi
 for problem in a b c d e f
 do
     mkdir -p "${SCRIPT_DIR}/../$1/$2/${problem}/$3"
+    (cd "${SCRIPT_DIR}/../$1/$2/${problem}/$3"; dune init executable "$3" --libs batteries && dune build)
 done
