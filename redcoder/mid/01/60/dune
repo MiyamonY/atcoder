@@ -1,0 +1,3 @@
+(executable
+ (name 60)
+ (libraries batteries))
